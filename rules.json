@@ -1,0 +1,37 @@
+[
+  {
+    "ip": "47.253.216.242",
+    "port": null,
+    "protocol": null,
+    "action": "block",
+    "reason": "IP thử nghiệm - chặn để test"
+  },
+  {
+    "ip_range": "10.0.0.0/8",
+    "port": null,
+    "protocol": null,
+    "action": "block",
+    "reason": "Chặn toàn bộ dải mạng nội bộ lạ 10.0.0.0/8"
+  },
+  {
+    "ip": null,
+    "port": [21, 23, 3389],
+    "protocol": null,
+    "action": "block",
+    "reason": "Chặn các dịch vụ rủi ro cao: FTP(21), Telnet(23), RDP(3389)"
+  },
+  {
+    "ip": null,
+    "port": null,
+    "protocol": "ICMP",
+    "action": "allow",
+    "reason": "Cho phép ping (ICMP) bình thường"
+  },
+  {
+    "ip": null,
+    "port": null,
+    "protocol": null,
+    "action": "allow",
+    "reason": "Luật mặc định - cho phép mọi thứ còn lại"
+  }
+]
