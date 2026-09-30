@@ -137,21 +137,35 @@ class DongCoFirewall:
     def bat_dau(self, ten_interface_chon=None):
         """
         ten_interface_chon:
-        - None -> lắng nghe TẤT CẢ các interface cùng lúc
+        - None -> lắng nghe TẤT CẢ các interface hợp lệ cùng lúc (truyền dạng danh sách)
         - 1 chuỗi tên -> chỉ lắng nghe đúng interface đó
         """
+        # Reset toàn bộ trạng thái/đếm số liệu mỗi khi bắt đầu 1 phiên giám sát mới,
+        # tránh việc IP đã từng bị cảnh báo ở phiên trước không được cảnh báo lại
+        self.so_goi_allow = 0
+        self.so_goi_block = 0
+        self.so_lan_scan = 0
+        self.so_lan_flood = 0
+        self.da_canh_bao_scan = set()
+        self.da_canh_bao_flood = set()
+
         self.rules = doc_rules_goc(DUONG_DAN_RULES)
         self.dang_dung.clear()
 
         self.hang_doi.put(("log", f"Đã tải {len(self.rules)} rule(s)."))
 
         if ten_interface_chon is None:
-            self.hang_doi.put(("log", "Đang lắng nghe trên: TẤT CẢ các mạng"))
+            # Gom danh sách tên interface hợp lệ, loại trùng lặp, giữ nguyên thứ tự ưu tiên
+            danh_sach = self.liet_ke_interface()
+            danh_sach_ten = list(dict.fromkeys(ten_iface for _, ten_iface, _ in danh_sach))
+            self.hang_doi.put(("log", f"Đang lắng nghe trên {len(danh_sach_ten)} interface: {danh_sach_ten}"))
+            target_iface = danh_sach_ten
         else:
             self.hang_doi.put(("log", f"Đang lắng nghe trên: {ten_interface_chon}"))
+            target_iface = ten_interface_chon
 
         self.luong = threading.Thread(
-            target=self._vong_lap_sniff, args=(ten_interface_chon,), daemon=True
+            target=self._vong_lap_sniff, args=(target_iface,), daemon=True
         )
         self.luong.start()
         return True

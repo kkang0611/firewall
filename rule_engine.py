@@ -81,7 +81,8 @@ if __name__ == "__main__":
         ("192.168.1.50", 3389, "TCP"),     # thử khớp danh sách port
         ("192.168.1.50", 500, "TCP"),      # thử khớp dải port 1-1024
         ("8.8.8.8", None, "ICMP"),          # thử khớp theo protocol
-        ("8.8.8.8", 443, "TCP"),             # không khớp gì -> allow mặc định
+        ("8.8.8.8", 443, "TCP"),
+        ("10.128.128.128", 80, "TCP"),             # không khớp gì -> allow mặc định
     ]
 
     for ip, port, proto in test_cases:
